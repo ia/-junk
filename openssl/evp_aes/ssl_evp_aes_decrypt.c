@@ -36,7 +36,7 @@ int main(int argc, const char *argv[])
 	}
 	printf("\n");
 	
-	unsigned int salt[] = {12345, 54321, 123};
+	unsigned int salt[] = {1, 2, 3};
 	unsigned char *password;
 	int password_len;
 	
@@ -44,10 +44,11 @@ int main(int argc, const char *argv[])
 	password_len = strlen(argv[2]);
 	
 	int i, nrounds = 5;
-	unsigned char key[32], iv[32];
+	unsigned char key[EVP_MAX_KEY_LENGTH], iv[EVP_MAX_IV_LENGTH];
+	//unsigned char key[32], iv[32];
 	
-	//i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), NULL, password, password_len, nrounds, key, iv);
-	i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char *)&salt, password, password_len, nrounds, key, iv);
+	i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), NULL, password, password_len, nrounds, key, iv);
+	//i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char *)&salt, password, password_len, nrounds, key, iv);
 	if (i != 32) {
 		printf("Key size is %d bits - should be 256 bits\n", i);
 		return -1;

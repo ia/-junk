@@ -18,7 +18,7 @@ int main(int argc, const char *argv[])
 		return usage();
 	}
 	
-	unsigned int salt[] = {12345, 54321, 123};
+	unsigned int salt[] = {1, 2, 3};
 	
 	/*
 	int s;
@@ -44,16 +44,29 @@ int main(int argc, const char *argv[])
 	password = (unsigned char *)argv[2];
 	password_len = strlen(argv[2]);
 	
-	int i, nrounds = 5;
-	unsigned char key[32], iv[32];
+	int i, nrounds = 1;
+	//unsigned char key[32], iv[32];
+	unsigned char key[EVP_MAX_KEY_LENGTH], iv[EVP_MAX_IV_LENGTH];
 	
-	//i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), NULL, password, password_len, nrounds, key, iv);
-	i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char *)&salt, password, password_len, nrounds, key, iv);
+	i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), NULL, password, password_len, nrounds, key, iv);
+	//i = EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), (unsigned char *)&salt, password, password_len, nrounds, key, iv);
 	if (i != 32) {
 		printf("Key size is %d bits - should be 256 bits\n", i);
 		return -1;
 	}
 	
+	printf("key :");
+	for (i = 0; key[i]; i++) {
+		printf(" %.2hhX", key[i]);
+	}
+	printf("\n");
+	
+	printf("iv  :");
+	for (i = 0; iv[i]; i++) {
+		printf(" %.2hhX", iv[i]);
+	}
+	printf("\n");
+	//OPENSSL_cleanse(argv[1],strlen(argv[1]));
 	EVP_CIPHER_CTX ctx;
 	EVP_CIPHER_CTX_init(&ctx);
 	EVP_EncryptInit_ex(&ctx, EVP_aes_256_cbc(), NULL, key, iv);
