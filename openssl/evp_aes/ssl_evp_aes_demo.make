@@ -2,11 +2,11 @@
 
 all: encrypt decrypt test
 
-encrypt: ssl_aes_encrypt.c
-	$(CC) -Wall -lcrypto -lssl ssl_aes_encrypt.c -o encrypt
+encrypt: ssl_evp_aes_encrypt.c
+	$(CC) -Wall -lcrypto -lssl ssl_evp_aes_encrypt.c -o encrypt
 
-decrypt: ssl_aes_decrypt.c
-	$(CC) -Wall -lcrypto -lssl ssl_aes_decrypt.c -o decrypt
+decrypt: ssl_evp_aes_decrypt.c
+	$(CC) -Wall -lcrypto -lssl ssl_evp_aes_decrypt.c -o decrypt
 
 test:
 	./encrypt a a
