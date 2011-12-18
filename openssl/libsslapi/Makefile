@@ -8,10 +8,10 @@ compile: ssl_bio_base64.c ssl_bio_aes.c ssl_evp_aes.c
 	$(CC) -Wall -fPIC -c ssl_evp_aes.c -o ssl_evp_aes.o
 
 library: compile
-	$(CC) -Wall -lcrypto ssl_bio_base64.o ssl_bio_aes.o ssl_evp_aes.o -shared -o libsslapi.so
+	$(CC) -Wall ssl_bio_base64.o ssl_bio_aes.o ssl_evp_aes.o -shared -o libsslapi.so -lcrypto
 
 test: compile library
-	$(CC) -Wall -L. -lsslapi sslapi.c -o sslapi
+	$(CC) -Wall -Wl,--no-as-needed -L. -lsslapi sslapi.c -o sslapi
 	LD_LIBRARY_PATH=.:${LD_LIBRARY_PATH} ./sslapi
 
 ssl_compability:
