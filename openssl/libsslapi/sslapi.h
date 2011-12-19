@@ -5,3 +5,5 @@
 
 #include "ssl_bio_base64.h"
 
+#include "ssl_rsa_pem.h"
+

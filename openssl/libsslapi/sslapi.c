@@ -7,9 +7,13 @@ int main(int argc, const char *argv[])
 	
 	ssl_bio_base64_encrypt_buffer("a\n");
 	ssl_bio_base64_decrypt_buffer("YQo=\n");
-
+	
 	char *cipher = "";
 	ssl_evp_aes_decrypt_buffer("password", cipher, 0);
 	
+	ssl_rsa_pem_encrypt_file("file.txt", "pub.pem", "file.bin");
+	ssl_rsa_pem_decrypt_file("file.bin", "sec.pem", "file_.txt");
+	
 	return 0;
 }
+

@@ -1,17 +1,20 @@
 #!/usr/bin/make -f
 
+CFLAGS:=$(CFLAGS) -Wall -Wextra -Wl,--as-needed
+
 all: compile library test ssl_compability
 
 compile: ssl_bio_base64.c ssl_bio_aes.c ssl_evp_aes.c
-	$(CC) -Wall -fPIC -c ssl_bio_base64.c -o ssl_bio_base64.o
-	$(CC) -Wall -fPIC -c ssl_bio_aes.c -o ssl_bio_aes.o
-	$(CC) -Wall -fPIC -c ssl_evp_aes.c -o ssl_evp_aes.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -fPIC -c ssl_bio_base64.c -o ssl_bio_base64.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -fPIC -c ssl_bio_aes.c    -o ssl_bio_aes.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -fPIC -c ssl_evp_aes.c    -o ssl_evp_aes.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -fPIC -c ssl_rsa_pem.c    -o ssl_rsa_pem.o
 
 library: compile
-	$(CC) -Wall ssl_bio_base64.o ssl_bio_aes.o ssl_evp_aes.o -shared -o libsslapi.so -lcrypto
+	$(CC) $(CFLAGS) $(LDFLAGS) ssl_bio_base64.o ssl_bio_aes.o ssl_evp_aes.o ssl_rsa_pem.o -shared -o libsslapi.so -lcrypto
 
 test: compile library
-	$(CC) -Wall -Wl,--no-as-needed -L. -lsslapi sslapi.c -o sslapi
+	$(CC) $(CFLAGS) $(LDFLAGS) sslapi.c -o sslapi -L. -lsslapi
 	LD_LIBRARY_PATH=.:${LD_LIBRARY_PATH} ./sslapi
 
 ssl_compability:
