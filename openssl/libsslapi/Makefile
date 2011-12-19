@@ -25,5 +25,6 @@ clean:
 	-rm -rf *.so
 	-rm -rf sslapi
 	-rm -rf file.txt file.enc file.enc.txt
+	-rm -rf file_ssl.txt file.bin
 
 .PHONY: all test clean
