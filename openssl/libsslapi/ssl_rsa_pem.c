@@ -56,7 +56,6 @@ int rsa_encrypt(RSA *key, unsigned char *plain, int len, unsigned char **cipher)
 	}
 }
 
-
 int ssl_rsa_pem_encrypt_buffer(char *plaintext, char *keyfile, int flags)
 {
 	printf("%s ->\n", __func__);
