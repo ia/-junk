@@ -23,7 +23,7 @@ int main(int argc, const char *argv[])
 		ssl_bio_base64_encrypt_buffer("a\n");
 		ssl_bio_base64_decrypt_buffer("YQo=\n");
 	} else if (!strcmp(argv[1], "rsa_pem")) {
-		keygen(2048);
+		ssl_rsa_pem_keygen(2048);
 		ssl_rsa_pem_encrypt_file("file.txt", "pub.pem", "file.bin");
 		//ssl_rsa_pem_decrypt_file("file.bin", "sec.pem", "file_.txt");
 	}

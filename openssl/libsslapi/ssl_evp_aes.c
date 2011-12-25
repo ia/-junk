@@ -31,6 +31,7 @@ int ssl_evp_aes_encrypt_buffer(char *plaintext, char *password, int flags)
 	EVP_EncryptFinal_ex(&ctx, ciphertext + ciphertext_len, &final_len);
 	EVP_CIPHER_CTX_cleanup(&ctx);
 	
+	printf("flags: %d\n", flags);
 	printf("cipher text: %s\n", ciphertext);
 	printf("cipher hex :");
 	for (i = 0; ciphertext[i]; i++) {
@@ -48,6 +49,11 @@ int ssl_evp_aes_encrypt_buffer(char *plaintext, char *password, int flags)
 
 int ssl_evp_aes_decrypt_buffer(char *password, char *ciphertext, int flags)
 {
-	printf("%s\n", __func__);
+	printf("%s ->\n", __func__);
+	printf("password   : %s\n", password);
+	printf("ciphertext : %s\n", ciphertext);
+	printf("flags      : %d\n", flags);
+	printf("%s <-\n", __func__);
 	return 0;
 }
+

@@ -47,7 +47,7 @@ int ssl_bio_base64_decrypt_buffer(char *ciphertext)
 	bmem = BIO_push(b64, bmem);
 	BIO_read(bmem, plaintext, ciphertext_len);
 	
-	//BIO_free_all(b64);
+	//BIO_free(b64);
 	BIO_free_all(bmem);
 	
 	printf("Plain : %s\n", plaintext);

@@ -8,6 +8,8 @@
 #include <openssl/pem.h>
 #include <openssl/err.h>
 
+void ssl_rsa_pem_keygen(int size);
+
 int ssl_rsa_pem_encrypt_buffer(char *plaintext, char *key, int flags);
 int ssl_rsa_pem_decrypt_buffer(char *ciphertext, char *key, int flags);
 

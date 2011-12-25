@@ -38,7 +38,7 @@ test-rsa:
 	@echo "RSA test:"
 	@echo "===="
 	LD_LIBRARY_PATH=.:${LD_LIBRARY_PATH} ./sslapi rsa_pem
-	openssl rsautl -decrypt -inkey sec.pem -in file.bin -out plainfile.txt
+	openssl rsautl -decrypt -inkey sec.pem -in file.bin -out plainfile.txt && cat plainfile.txt
 	@echo "===="
 
 clean:

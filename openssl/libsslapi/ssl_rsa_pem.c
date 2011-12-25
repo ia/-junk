@@ -12,7 +12,7 @@
 #define CIPHER   'c'
 #define DECIPHER 'd'
 
-void keygen(int size)
+void ssl_rsa_pem_keygen(int size)
 {
 	RSA *key = NULL;
 	FILE *fp;
@@ -59,17 +59,27 @@ int rsa_encrypt(RSA *key, unsigned char *plain, int len, unsigned char **cipher)
 
 int ssl_rsa_pem_encrypt_buffer(char *plaintext, char *keyfile, int flags)
 {
+	printf("%s ->\n", __func__);
+	printf("plaintext : %s\n", plaintext);
+	printf("keyfile   : %s\n", keyfile);
+	printf("flags     : %d\n", flags);
+	printf("%s <-\n", __func__);
 	return 0;
 }
 
 int ssl_rsa_pem_decrypt_buffer(char *ciphertext, char *keyfile, int flags)
 {
+	printf("%s ->\n", __func__);
+	printf("ciphertext : %s\n", ciphertext);
+	printf("keyfile    : %s\n", keyfile);
+	printf("flags      : %d\n", flags);
+	printf("%s <-\n", __func__);
 	return 0;
 }
 
 int ssl_rsa_pem_encrypt_file(char *plainfile, char *keyfile, char *output)
 {
-	int size = 0, len = 0, ks = 0, clen = 0;
+	int size = 0, len = 0, ks = 0; //, clen = 0;
 	unsigned char *cipher = NULL, *plain = NULL;
 	FILE *fpkey = NULL, *fpin = NULL, *fpout = NULL;
 	RSA *key = NULL;
@@ -99,16 +109,17 @@ int ssl_rsa_pem_encrypt_file(char *plainfile, char *keyfile, char *output)
 		memset(plain, '\0', ks + 1);
 		memset(cipher, '\0', ks + 1);
 		len = fread(plain, 1, ks - 11, fpin);
-		size = rsa_encrypt(key, plain, len, &cipher);
-		fwrite(cipher, 1, size, fpout);
 		/*
-		clen = 0;
+		 * size = rsa_encrypt(key, plain, len, &cipher);
+		 */
+		
 		srand(time(NULL));
-		if ((clen = RSA_public_encrypt(len, plain, cipher, key, RSA_PKCS1_PADDING)) == -1) {
+		if ((size = RSA_public_encrypt(len, plain, cipher, key, RSA_PKCS1_PADDING)) == -1) {
 			fprintf(stderr, "%s\n", ERR_error_string(ERR_get_error(), NULL));
-			return -1;
+			exit(EXIT_FAILURE);
 		}
-		*/
+		
+		fwrite(cipher, 1, size, fpout);
 	}
 	
 	fclose(fpout);
@@ -123,7 +134,11 @@ int ssl_rsa_pem_encrypt_file(char *plainfile, char *keyfile, char *output)
 
 int ssl_rsa_pem_decrypt_file(char *cipherfile, char *keyfile, char *output)
 {
-	printf("%s\n", __func__);
+	printf("%s ->\n", __func__);
+	printf("cipherfile : %s\n", cipherfile);
+	printf("keyfile    : %s\n", keyfile);
+	printf("output     : %s\n", output);
+	printf("%s <-\n", __func__);
 	return 0;
 }
 
