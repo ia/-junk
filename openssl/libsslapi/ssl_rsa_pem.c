@@ -1,6 +1,62 @@
 
 #include "ssl_rsa_pem.h"
 
+#define SECFILE "sec.pem"
+#define PUBFILE "pub.pem"
+
+#define READPUB   0
+#define READSEC   1
+
+#define HELP     'h'
+#define KEYGEN   'g'
+#define CIPHER   'c'
+#define DECIPHER 'd'
+
+void keygen(int size)
+{
+	RSA *key = NULL;
+	FILE *fp;
+	
+	if ((key = RSA_generate_key(size, 3, NULL, NULL)) == NULL) {
+		fprintf(stderr, "%s\n", ERR_error_string(ERR_get_error(), NULL));
+		exit(EXIT_FAILURE);
+	}
+	
+	if (RSA_check_key(key) < 1) {
+		fprintf(stderr, "Error: Problems while generating RSA Key.\nRetry.\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	fp = fopen(SECFILE, "w");
+	if (PEM_write_RSAPrivateKey(fp, key, NULL, NULL, 0, 0, NULL) == 0) {
+		fprintf(stderr,"Error: problems while writing RSA Private Key.\n");
+		exit(EXIT_FAILURE);
+	}
+	fclose(fp);
+	
+	fp = fopen(PUBFILE, "w");
+	if (PEM_write_RSAPublicKey(fp, key) == 0) {
+		fprintf(stderr,"Error: problems while writing RSA Public Key.\n");
+		exit(EXIT_FAILURE);
+	}
+	fclose(fp);
+	RSA_free(key);
+	return;
+}
+
+int rsa_encrypt(RSA *key, unsigned char *plain, int len, unsigned char **cipher)
+{
+	int clen = 0;
+	srand(time(NULL));
+	if ((clen = RSA_public_encrypt(len, plain, *cipher, key, RSA_PKCS1_PADDING)) == -1) {
+		fprintf(stderr, "%s\n", ERR_error_string(ERR_get_error(), NULL));
+		exit(EXIT_FAILURE);
+	} else {
+		return clen;
+	}
+}
+
+
 int ssl_rsa_pem_encrypt_buffer(char *plaintext, char *keyfile, int flags)
 {
 	return 0;
@@ -43,14 +99,16 @@ int ssl_rsa_pem_encrypt_file(char *plainfile, char *keyfile, char *output)
 		memset(plain, '\0', ks + 1);
 		memset(cipher, '\0', ks + 1);
 		len = fread(plain, 1, ks - 11, fpin);
-		//size = rsa_encrypt(key, plain, len, &cipher);
+		size = rsa_encrypt(key, plain, len, &cipher);
+		fwrite(cipher, 1, size, fpout);
+		/*
 		clen = 0;
 		srand(time(NULL));
 		if ((clen = RSA_public_encrypt(len, plain, cipher, key, RSA_PKCS1_PADDING)) == -1) {
 			fprintf(stderr, "%s\n", ERR_error_string(ERR_get_error(), NULL));
 			return -1;
 		}
-		fwrite(cipher, 1, clen, fpout);
+		*/
 	}
 	
 	fclose(fpout);
