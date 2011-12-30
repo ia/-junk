@@ -25,7 +25,7 @@ int main(int argc, const char *argv[])
 	} else if (!strcmp(argv[1], "rsa_pem")) {
 		ssl_rsa_pem_keygen(2048);
 		ssl_rsa_pem_encrypt_file("file.txt", "pub.pem", "file.bin");
-		//ssl_rsa_pem_decrypt_file("file.bin", "sec.pem", "file_.txt");
+		ssl_rsa_pem_decrypt_file("file.bin", "sec.pem", "file_.txt");
 	}
 	
 	return 0;

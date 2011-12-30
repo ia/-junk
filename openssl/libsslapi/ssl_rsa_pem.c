@@ -137,6 +137,59 @@ int ssl_rsa_pem_decrypt_file(char *cipherfile, char *keyfile, char *output)
 	printf("cipherfile : %s\n", cipherfile);
 	printf("keyfile    : %s\n", keyfile);
 	printf("output     : %s\n", output);
+	
+	int size = 0, len = 0, ks = 0; //, clen = 0;
+	unsigned char *cipher = NULL, *plain = NULL;
+	FILE *fpkey = NULL, *fpin = NULL, *fpout = NULL;
+	RSA *key = NULL;
+	
+	if ((fpkey = fopen(keyfile, "r")) == NULL) {
+		fprintf(stderr, "Error: Private Key file doesn't exists.\n");
+		return -1;
+	}
+	
+	if ((key = PEM_read_RSAPrivateKey(fpkey, NULL, NULL, NULL)) == NULL) {
+		fprintf(stderr, "Error: problems while reading Public Key.\n");
+		return -1;
+	}
+	fclose(fpkey);
+	
+	if (!(fpin = fopen(cipherfile, "r"))) {
+		fprintf(stderr, "Error: Cannot locate input file.\n");
+		return -1;
+	}
+	
+	fpout = fopen(output, "w");
+	ks = RSA_size(key);
+	plain = (unsigned char *) malloc(ks * sizeof(unsigned char));
+	cipher = (unsigned char*) malloc(ks * sizeof(unsigned char));
+	
+	while (!feof(fpin)) {
+		memset(plain, '\0', ks);
+		memset(cipher, '\0', ks);
+		//len = fread(plain, 1, ks - 11, fpin);
+		if ((len = fread(cipher, 1, ks, fpin)) == 0) {
+			break;
+		}
+		/*
+		 * size = rsa_encrypt(key, plain, len, &cipher);
+		 */
+		
+		srand(time(NULL));
+		if ((size = RSA_private_decrypt(len, cipher, plain, key, RSA_PKCS1_PADDING)) == -1) {
+			fprintf(stderr, "%s\n", ERR_error_string(ERR_get_error(), NULL));
+			exit(EXIT_FAILURE);
+		}
+		
+		fwrite(plain, 1, size, fpout);
+	}
+	
+	fclose(fpout);
+	fclose(fpin);
+	free(cipher);
+	free(plain);
+	RSA_free(key);
+	
 	printf("%s <-\n", __func__);
 	return 0;
 }

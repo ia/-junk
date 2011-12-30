@@ -45,7 +45,7 @@ clean:
 	-rm -rf *.o
 	-rm -rf *.so
 	-rm -rf sslapi
-	-rm -rf file.txt file.enc file.enc.txt
+	-rm -rf file.txt file.enc file.enc.txt file_.txt
 	-rm -rf plainfile.txt file.bin
 	-rm -rf file_ssl.txt pub.pem sec.pem
 
