@@ -8,6 +8,15 @@ struct st {
 	int k;
 };
 
+struct st2 {
+	int a;
+	int *b;
+	char c;
+	char *s;
+	struct st st1;
+	struct st *st2ptr;
+};
+
 int ptr_chr(char **string)
 {
 	printf("ptr_chr ->\n");
@@ -72,7 +81,8 @@ int test()
 	}
 	printf("\n");
 	
-	
+	struct st2 st;
+
 	return 0;
 }
 

@@ -89,10 +89,13 @@ int main(int argc, char const* argv[])
 	ptr_st(&s);
 	printf("%d\n", s.i);
 	*/
-/*
+
 	int a = 10;
 	ptr(&a);
 	printf("%d\n", a);
-*/
+
+	int *b;
+	*b = 20;
+	printf("%d\n", *b);
 	return 0;
 }
